@@ -1,2 +1,6 @@
 # Custom-Platform-Image-Gallery
-This is a Simple Image Gallery Web Application created by using HTML, CSS, JavaScript. In this you can add one or multiple image files by one button and it will create dynamic container of images showing with delete button and whenever you click on any image it will open a dynamic view of the image in this container you get the features like zoomIn
+Hey there! I recently created a really cool Simple Image Gallery Web Application using HTML, CSS, and JavaScript. It's super easy to use and lets you upload multiple images with just one click of a button. The gallery looks amazing and even has a delete button, so you can remove images whenever you want.
+
+One of my favourite things about this app is the dynamic view option. Click on any image, and you'll be able to zoom in, zoom out, and even see the next or previous image. You can easily close the preview when you're done. Plus, there's an automatic slideshow feature that changes every 10 seconds!
+
+Overall, the Simple Image Gallery Web Application is a great way to showcase your images in a visually stunning and user-friendly way. Give it a try!
