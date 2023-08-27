@@ -48,8 +48,9 @@ body {
 #imageGallery {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-    gap: 50px;
-    padding: 50px;
+    gap: 20px;
+    padding: 20px;
+    
 }
 
 #imageGallery img {
@@ -58,6 +59,21 @@ body {
     object-fit: cover;
     cursor: pointer;
 }
+
+.img-container{
+    margin: 15px;
+    position: relative;
+}
+
+
+
+.img-container img{
+    display: block !important;
+    object-fit: contain !important;
+}
+
+
+
 
 /* Image Preview */
 #previewContainer {

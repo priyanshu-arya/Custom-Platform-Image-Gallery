@@ -23,6 +23,8 @@ function openFilePicker() {
     fileInput.click();
 }
 
+
+
 // Function to handle file selection and create image containers
 function handleFileSelect(event) {
     const files = event.target.files;
@@ -37,9 +39,16 @@ function handleFileSelect(event) {
         deleteButton.classList.add("delete-button");
         deleteButton.addEventListener("click", () => deleteImage(imgContainer));
 
+       
+    
+
         const img = document.createElement("img");
         const blobUrl = URL.createObjectURL(file);
         img.src = blobUrl;
+        // img.addEventListener("load", ()=>{
+        //     imgContainer.style.width = img.naturalWidth + "px";
+        //     imgContainer.style.height = img.naturalHeight + "px";
+        // });
         img.addEventListener("click", () => openSlideshow(blobUrl));
         imgContainer.appendChild(img);
         imgContainer.appendChild(deleteButton);
@@ -58,28 +67,25 @@ function deleteImage(container) {
     }
 }
 
-let zoomLevel = 100; // Initial zoom level in percentage
-
-// Function to zoom in the preview image
+let zoomLevel = 100; 
 function zoomIn() {
     console.log("Zoom In clicked");
-    if (!previewImage.classList.contains("zoomed")) {
-        if (zoomLevel < 120) {
+        if (zoomLevel < 180) {
             zoomLevel += 10;
             updateZoom();
-        }
+        
     }
 }
 
 // Function to zoom out the preview image
 function zoomOut() {
+    console.log("Zoom Level ZoomOut FUN: ",zoomLevel)
     console.log("Zoom Out clicked");
-    if (previewImage.classList.contains("zoomed")) {
-        if (zoomLevel > 20) {
+        if (zoomLevel > 100) {
             zoomLevel -= 10;
             updateZoom();
         }
-    }
+    
 }
 
 // Function to update the zoom level and preview image size
@@ -154,6 +160,9 @@ function openSlideshow(imageSrc) {
         // Close preview and clear slideshow when the close icon is clicked
         closePreview.addEventListener("click", () => {
             clearInterval(slideshowInterval);
+            zoomLevel = 100;
+            updateZoom();
+            console.log("CURR ZOOM LVL : ",zoomLevel);
             previewContainer.style.display = "none";
             slideshow.innerHTML = "";
         });
