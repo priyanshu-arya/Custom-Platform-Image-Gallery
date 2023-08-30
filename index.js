@@ -3,7 +3,7 @@ const uploadButton = document.getElementById("uploadButton");
 const imageGallery = document.getElementById("imageGallery");
 const slideshowContainer = document.getElementById("slideshowContainer");
 const slideshow = document.getElementById('slideshow');
-
+let slideshowInterval;
 
 // Event listener for the "Upload" button
 uploadButton.addEventListener("click", openFilePicker);
@@ -45,10 +45,6 @@ function handleFileSelect(event) {
         const img = document.createElement("img");
         const blobUrl = URL.createObjectURL(file);
         img.src = blobUrl;
-        // img.addEventListener("load", ()=>{
-        //     imgContainer.style.width = img.naturalWidth + "px";
-        //     imgContainer.style.height = img.naturalHeight + "px";
-        // });
         img.addEventListener("click", () => openSlideshow(blobUrl));
         imgContainer.appendChild(img);
         imgContainer.appendChild(deleteButton);
@@ -69,56 +65,75 @@ function deleteImage(container) {
 
 let zoomLevel = 100; 
 function zoomIn() {
+    if(!zoomInIcon.disabled){
     console.log("Zoom In clicked");
-        if (zoomLevel < 180) {
+        if (zoomLevel < 120) {
             zoomLevel += 10;
             updateZoom();
         
+        }
     }
 }
 
 // Function to zoom out the preview image
 function zoomOut() {
-    console.log("Zoom Level ZoomOut FUN: ",zoomLevel)
-    console.log("Zoom Out clicked");
+    if(!zoomOutIcon.disabled){
         if (zoomLevel > 100) {
             zoomLevel -= 10;
             updateZoom();
         }
+    }
     
 }
 
 // Function to update the zoom level and preview image size
 function updateZoom() {
-    console.log("Updating zoom level:", zoomLevel);
     previewImage.style.transform = `scale(${zoomLevel / 100})`;
-    console.log("Updating zoom level:", zoomLevel);
+    zoomInIcon.disabled = zoomLevel>=120;
+    zoomOutIcon.disabled = zoomLevel<=100;
+
+    if (zoomLevel === 100) {
+        console.log("ZoomLevel: ",zoomLevel);
+        zoomOutIcon.disabled = true;
+        zoomOutIcon.style.color = 'gray'; 
+    } else {
+        console.log("ZoomLevel",zoomLevel);
+        zoomOutIcon.disabled = false;
+        zoomOutIcon.style.color = 'white'; 
+    }
+    if (zoomLevel === 120) {
+        console.log("ZoomLevel : ",zoomLevel);
+        zoomInIcon.disabled = true;
+        zoomInIcon.style.color = 'grey'; 
+    } else {
+        console.log("ZoomLevel: ",zoomLevel);
+        zoomInIcon.disabled = false;
+        zoomInIcon.style.color = 'white'; 
+    }
+
+
 }
 
 // Function to open the image slideshow Container
 function openSlideshow(imageSrc) {
-    // Create the slideshow container and controls if not already created
-    // Will only work when not in slide show mode
     if (!previewContainer) {
-        // Create and append slideshow container
         previewContainer = document.createElement("div");
         previewContainer.id = "previewContainer";
         document.body.appendChild(previewContainer);
 
-        // Create and append preview image
         previewImage = document.createElement("img");
         previewImage.id = "previewImage";
         previewContainer.appendChild(previewImage);
 
-        // Create and append slideshow controls
+   
         const previewControls = document.createElement("div");
         previewControls.id = "previewControls";
         previewControls.innerHTML = `
         <i class="fa fa-chevron-left" id="prevIcon"></i>
         <i class="fa fa-times" id="closePreview"></i>
         <i class="fa fa-chevron-right" id="nextIcon"></i>
-        <i class="fa fa-plus" id="zoomInIcon"></i>
-        <i class="fa fa-minus" id="zoomOutIcon"></i>
+        <i class="fa fa-plus" id="zoomInIcon" class = "button"></i>
+        <i class="fa fa-minus" id="zoomOutIcon" class = "button"></i>
         `;
         previewContainer.appendChild(previewControls);
 
@@ -127,7 +142,8 @@ function openSlideshow(imageSrc) {
         nextIcon = previewControls.querySelector("#nextIcon");
         closePreview = previewControls.querySelector("#closePreview");
         zoomInIcon = previewControls.querySelector("#zoomInIcon");
-        zoomOutIcon = previewControls.querySelector("#zoomOutIcon");   
+        zoomOutIcon = previewControls.querySelector("#zoomOutIcon"); 
+        
 
         zoomInIcon.addEventListener("click", () => {
             zoomIn();
@@ -144,6 +160,8 @@ function openSlideshow(imageSrc) {
         });
 
         nextIcon.addEventListener("click", () => {
+            zoomLevel = 100;
+            updateZoom();
             currentImageIndex++;
             updatePreview();
         });
@@ -177,8 +195,8 @@ function openSlideshow(imageSrc) {
     previewContainer.style.display = "block";
 
     // Automatically update slideshow every 3 seconds
-    const slideshowInterval = setInterval(updateSlideshowAutomatically, 10000);
-
+    slideshowInterval = setInterval(updateSlideshowAutomatically, 10000);
+    
     // Update preview initially
     updatePreview();
 }
@@ -188,6 +206,7 @@ function openSlideshow(imageSrc) {
 function updateSlideshowAutomatically() {
     currentImageIndex++;
     if (currentImageIndex >= imageSources.length) {
+        
         currentImageIndex = 0;
     }
     updatePreview();
